@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import OneHotEncoder, MinMaxScaler,LabelEncoder
+from sklearn.preprocessing import OneHotEncoder, StandardScaler,LabelEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
@@ -25,20 +25,24 @@ class DataTransformation:
     def get_data_transformer_object(self):
         try:
             logging.info("Data transformation initiated")
-            numeric_features = ['age', 'fnlwgt', 'educational-num', 'capital-gain', 'capital-loss', 'hours-per-week']
+            numeric_features = ['Experience', 'Age']
+            categorical_features = ['Education', 'Location', 'Job_Title', 'Gender']
+            num_pipeline= Pipeline(
+                steps=[
+                ("imputer",SimpleImputer(strategy="median")),
+                ("scaler",StandardScaler())
 
-            categorical_features = ['workclass', 'marital-status', 'occupation', 'relationship', 'race', 'gender', 'native-country']
-            
-            num_pipeline = Pipeline(steps=[
-                ('imputer', SimpleImputer(strategy='median')),
-                ('scaler', MinMaxScaler())
-              ]
+                ]
             )
-            cat_pipeline = Pipeline(steps=[
-                ('imputer', SimpleImputer(strategy='most_frequent')),
-                ('onehot_encoder', OneHotEncoder(sparse_output=False))
-                
-            ]    
+
+            cat_pipeline=Pipeline(
+
+                steps=[
+                ("imputer",SimpleImputer(strategy="most_frequent")),
+                ("one_hot_encoder",OneHotEncoder()),
+                ("scaler",StandardScaler(with_mean=False))
+                ]
+
             )
 
             logging.info("Numerical and categorical pipelines created")
@@ -54,60 +58,46 @@ class DataTransformation:
         except Exception as e:
             raise CustomException(e, sys) from e
 
-    from sklearn.preprocessing import LabelEncoder
 
-    def initiate_data_transformation(self, train_path, test_path):
+    def initiate_data_transformation(self,train_path,test_path):
+
         try:
-            train_df = pd.read_csv(train_path)
-            test_df = pd.read_csv(test_path)
+            train_df=pd.read_csv(train_path)
+            test_df=pd.read_csv(test_path)
 
             logging.info("Read train and test data completed")
-            logging.info(f"Train Data Shape: {train_df.shape}")
-            logging.info(f"Test Data Shape: {test_df.shape}")
 
-            preprocessing_obj = self.get_data_transformer_object()
+            logging.info("Obtaining preprocessing object")
 
-            target_column_name = "income"
+            preprocessing_obj=self.get_data_transformer_object()
 
-            # Apply LabelEncoder to the target column
-            label_encoder = LabelEncoder()
-            train_df[target_column_name] = label_encoder.fit_transform(train_df[target_column_name])
-            test_df[target_column_name] = label_encoder.transform(test_df[target_column_name])
+            target_column_name='Salary'
+            numerical_columns = ['Experience', 'Age', 'Salary']
+            input_feature_train_df=train_df.drop(columns=[target_column_name],axis=1)
+            target_feature_train_df=train_df[target_column_name]
 
-            # Split input and target features
-            input_feature_train_df = train_df.drop(columns=[target_column_name], axis=1)
-            target_feature_train_df = train_df[target_column_name]
+            input_feature_test_df=test_df.drop(columns=[target_column_name],axis=1)
+            target_feature_test_df=test_df[target_column_name]
 
-            input_feature_test_df = test_df.drop(columns=[target_column_name], axis=1)
-            target_feature_test_df = test_df[target_column_name]
+            logging.info(
+                f"Applying preprocessing object on training dataframe and testing dataframe."
+            )
 
-            # Check for empty DataFrames
-            if input_feature_train_df.empty:
-                raise ValueError("Input feature DataFrame for training is empty.")
-            if target_feature_train_df.empty:
-                raise ValueError("Target feature DataFrame for training is empty.")
+            input_feature_train_arr=preprocessing_obj.fit_transform(input_feature_train_df)
+            input_feature_test_arr=preprocessing_obj.transform(input_feature_test_df)
 
-            logging.info("Applying preprocessing object on training and testing features")
+            train_arr = np.c_[
+                input_feature_train_arr, np.array(target_feature_train_df)
+            ]
+            test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
 
-            input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df)
-            input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)
+            logging.info(f"Saved preprocessing object.")
 
-            # Convert target Series to 2D arrays for concatenation
-            target_feature_train_arr = target_feature_train_df.values.reshape(-1, 1)
-            target_feature_test_arr = target_feature_test_df.values.reshape(-1, 1)
-
-            # Log shapes
-            logging.info(f"Input Feature Train Array Shape: {input_feature_train_arr.shape}")
-            logging.info(f"Target Feature Train Array Shape: {target_feature_train_arr.shape}")
-
-            # Concatenate
-            train_arr = np.concatenate([input_feature_train_arr, target_feature_train_arr], axis=1)
-            test_arr = np.concatenate([input_feature_test_arr, target_feature_test_arr], axis=1)
-
-            logging.info("Saved preprocessing object")
             save_object(
+
                 file_path=self.data_transformation_config.preprocessor_obj_file_path,
                 obj=preprocessing_obj
+
             )
 
             return (
@@ -115,6 +105,5 @@ class DataTransformation:
                 test_arr,
                 self.data_transformation_config.preprocessor_obj_file_path,
             )
-
         except Exception as e:
-            raise CustomException(e, sys)
+            raise CustomException(e,sys)

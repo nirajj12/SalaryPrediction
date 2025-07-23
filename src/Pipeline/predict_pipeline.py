@@ -30,7 +30,7 @@ class CustomData:
         self,
         experience: int,
         age: int,
-        salary: float,
+        
         education: str,
         location: str,
         job_title: str,
@@ -38,18 +38,19 @@ class CustomData:
     ):
         self.experience = experience
         self.age = age
-        self.salary = salary
+        
         self.education = education
         self.location = location
         self.job_title = job_title
         self.gender = gender
+
 
     def get_data_as_data_frame(self):
         try:
             custom_data_input_dict = {
                 "Experience": [self.experience],
                 "Age": [self.age],
-                "Salary": [self.salary],
+                
                 "Education": [self.education],
                 "Location": [self.location],
                 "Job_Title": [self.job_title],

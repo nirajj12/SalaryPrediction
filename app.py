@@ -6,6 +6,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
 import time
+from src.Pipeline.predict_pipeline import PredictPipeline, CustomData
+
 
 # Page configuration
 st.set_page_config(
@@ -179,18 +181,8 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Load model with error handling
-@st.cache_resource
-def load_model():
-    try:
-        model = joblib.load("salary_prediction_pipeline.pkl")
-        return model
-    except FileNotFoundError:
-        st.error("❌ Model file not found. Please ensure 'salary_prediction_pipeline.pkl' exists in the app directory.")
-        st.stop()
-    except Exception as e:
-        st.error(f"❌ Error loading model: {str(e)}")
-        st.stop()
+
+
 
 # Data validation functions
 def validate_age(age):
@@ -205,7 +197,7 @@ def validate_experience(experience, age):
         return False, "Experience cannot exceed (Age - 16) years"
     return True, ""
 
-def get_salary_insights(age, experience, education, job_title):
+def get_salary_insights(age, experience, education,job_title):
     insights = []
     
     # Experience insights
@@ -235,12 +227,12 @@ def get_salary_insights(age, experience, education, job_title):
 
 # Main app function
 def main():
-    model = load_model()
+    
     
     # Header
     st.markdown("""
     <div class="main-header">
-        <h1>💼 AI-Powered Salary Prediction</h1>
+        <h1>💼 Employee Salary Prediction</h1>
         <p>Get accurate salary predictions based on your professional profile</p>
     </div>
     """, unsafe_allow_html=True)
@@ -268,7 +260,7 @@ def main():
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        st.markdown('<div class="input-section">', unsafe_allow_html=True)
+        
         st.markdown("### 👤 Personal Information")
         
         # Personal info in columns
@@ -298,7 +290,7 @@ def main():
         with prof_col1:
             education_level = st.selectbox(
                 "Education Level",
-                ["High School", "Bachelor", "Master", "PhD"],
+                ["High School", "Bachelor", "PhD", "Master"],
                 index=1,
                 help="Your highest education qualification"
             )
@@ -306,9 +298,25 @@ def main():
         with prof_col2:
             job_title = st.selectbox(
                 "Job Title",
-                ["Developer", "Data Scientist", "Manager", "Analyst", "Engineer"],
+                ["Director", "Analyst", "Manager", "Engineer"],
                 help="Your current or desired job title"
             )
+
+        loc_col1, loc_col2 = st.columns(2)
+
+        with loc_col1:
+            location = st.selectbox(
+                "📌 Location",
+                ["Suburban", "Rural", "Urban"],
+                index=0,
+                help="Select your current living location"
+            )
+
+            
+    
+    
+
+    
         
         # Experience with advanced slider
         st.markdown("### 📈 Experience")
@@ -364,17 +372,19 @@ def main():
                 time.sleep(1)
                 
                 try:
-                    # Create input DataFrame (using original values, not encoded)
-                    input_df = pd.DataFrame({
-                        "Age": [age],
-                        "Gender": [gender],  # Use original categorical values
-                        "Education Level": [education_level],
-                        "Job Title": [job_title],
-                        "Years of Experience": [experience]
-                    })
+                    input_data = CustomData(
+                    experience=experience,
+                    age=age,
+                    education=education_level,
+                    location=location,
+                    job_title=job_title,
+                    gender=gender
+                )
+
+                    df = input_data.get_data_as_data_frame()
                     
-                    # Make prediction
-                    prediction = model.predict(input_df)[0]
+                    predictor = PredictPipeline()
+                    prediction = predictor.predict(df)[0]
                     
                     # Currency conversion (simplified)
                     currency_multipliers = {

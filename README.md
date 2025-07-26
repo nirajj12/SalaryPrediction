@@ -11,7 +11,7 @@ This project is part of a 6-week internship under **Edunet Foundation** with gui
 
 ## 🚀 Features
 - 🔍 **Real-time salary prediction** based on age, experience, education, job title, gender, and location.
-- 🎯 **ML pipeline** built with XGBoost and CatBoost achieving **R² Score ~ 0.91**.
+- 🎯 **ML pipeline** built using Ridge, Lasso, and Linear Regression, achieving an **R² Score ~ 0.87**, delivering strong prediction accuracy on salary data.
 - 🖥️ **Modern Streamlit UI** with insights, validation, salary visualization, and CSV export.
 - ☁️ **Deployed on Render** for public access.
 

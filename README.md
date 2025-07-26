@@ -1,4 +1,4 @@
-# 💼 Employee Salary Prediction - Niraj's Capstone Project
+# 💼 Employee Salary Prediction - Niraj's Project
 
 [Live Project ➜](https://salaryprediction-6979.onrender.com) • [GitHub Repo ➜](https://github.com/nirajj12/SalaryPrediction) • [Dataset ➜](https://www.kaggle.com/datasets/mrsimple07/salary-prediction-data)
 

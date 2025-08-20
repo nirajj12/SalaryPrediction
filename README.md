@@ -1,6 +1,6 @@
-**🌟 Employee Salary Prediction - Complete Pipeline Documentation**
+# 🌟 Employee Salary Prediction - Complete Pipeline Documentation
 
-📍 **Live Project Link**: [Salary Prediction App](https://salaryprediction-6979.onrender.com)  
+📍 **Live Project Link**: [Salary Prediction App](https://salaryprediction-nirajj12.streamlit.app)  
 🔗 **GitHub Repository**: [GitHub - Niraj's Salary Prediction](https://github.com/nirajj12/SalaryPrediction)  
 📊 **Dataset Used**: [Kaggle - Salary Prediction Data](https://www.kaggle.com/datasets/mrsimple07/salary-prediction-data)
 
@@ -94,24 +94,23 @@ To build a fully functional ML-powered web application that allows users to:
 **Code File**: `app.py`
 
 #### 🌐 6. Deployment
-**Platform**: Render.com
+**Platform**: Streamlit Cloud
 
 **Deployment Files**:
-- `Procfile` (to define web service)
 - `requirements.txt` (library dependencies)
 - `setup.py` (project packaging)
 
-**Live URL**: [https://salaryprediction-6979.onrender.com](https://salaryprediction-6979.onrender.com)
+**Live URL**: [https://salaryprediction-nirajj12.streamlit.app](https://salaryprediction-nirajj12.streamlit.app)
 
 ---
 
 ### 📊 Model Performance Summary
 | **Metric**                  | **Value**              |
-|----------------------------|------------------------|
-| **R² Score (Best Model)**  | 0.87                   |
-| **Root Mean Squared Error**| ₹15,616.67             |
-| **Mean Absolute Error (MAE)** | ₹9,000 (approx.)    |
-| **Best Model**             | Ridge / Lasso / Linear Regression |
+|------------------------------|------------------------|
+| **R² Score (Best Model)**    | 0.91                   |
+| **Root Mean Squared Error**  | ₹15,000–₹16,000        |
+| **Mean Absolute Error (MAE)**| ~₹9,000                |
+| **Best Model**               | CatBoost / XGBoost / Ridge / Lasso |
 
 ---
 
@@ -124,7 +123,7 @@ To build a fully functional ML-powered web application that allows users to:
 | Preprocessing     | OneHotEncoder, StandardScaler, Imputers     |
 | Visualization     | Matplotlib, Seaborn, Plotly                 |
 | Web UI            | Streamlit                                   |
-| Deployment        | Render                                      |
+| Deployment        | Streamlit Cloud                             |
 | Serialization     | pickle, dill                                |
 | Version Control   | Git, GitHub                                 |
 
@@ -147,16 +146,16 @@ To build a fully functional ML-powered web application that allows users to:
 ---
 
 ### 🎯 Future Enhancements
-- 🔐 Add login/signup feature
-- 🌍 Add location-based cost-of-living adjustments
-- 📈 Show historical salary growth trends
-- 🗣️ Add multi-language UI support
-- 🧾 Add model explainability (SHAP, LIME)
+- 🔐 Add login/signup feature  
+- 🌍 Add location-based cost-of-living adjustments  
+- 📈 Show historical salary growth trends  
+- 🗣️ Add multi-language UI support  
+- 🧾 Add model explainability (SHAP, LIME)  
 
 ---
 
 ### 🙌 Acknowledgments
-- 📚 Dataset: [Kaggle - Salary Prediction Data](https://www.kaggle.com/datasets/mrsimple07/salary-prediction-data)
-- 🤝 Internship Host: Edunet Foundation
-- 🎓 Supported by: IBM SkillsBuild & AICTE
-- 👨‍🏫 Mentors: Dr. Nanthini Mohan and Channabasava Yadav
+- 📚 Dataset: [Kaggle - Salary Prediction Data](https://www.kaggle.com/datasets/mrsimple07/salary-prediction-data)  
+- 🤝 Internship Host: Edunet Foundation  
+- 🎓 Supported by: IBM SkillsBuild & AICTE  
+- 👨‍🏫 Mentors: Dr. Nanthini Mohan and Channabasava Yadav  
